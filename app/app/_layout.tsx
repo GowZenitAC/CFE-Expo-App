@@ -45,6 +45,15 @@ export default function AppLayout() {
           headerTintColor: "#fff",
         }}
       />
+      <Stack.Screen
+        name="signatures/create"
+        options={{
+          title: "Crear Firma",
+          headerStyle: { backgroundColor: "#00905f" },
+          headerTintColor: "#fff",
+        }}
+      />
     </Stack>
+    
   );
 }

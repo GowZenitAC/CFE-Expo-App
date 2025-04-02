@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, Alert } from "react-native";
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "react-native-paper";
@@ -17,6 +17,9 @@ import SwitchField from "@/app/app/reports/create/components/SwitchField";
 import FormSection from "@/app/app/reports/create/components/FormSection";
 import TextInputField from "./components/TextInputField";
 import RadioField from "./components/RadioField";
+import SignatureSelector from "@/app/app/reports/create/components/SignatureSelector";
+import { Signature } from "@/types/signature";
+import { useState } from "react";
 
 export default function ReportCreateScreen() {
   const {
@@ -26,13 +29,21 @@ export default function ReportCreateScreen() {
   } = useForm<ReportFormData>({
     resolver: zodResolver(reportSchema),
   });
+  const [selectedSignature, setSelectedSignature] = useState<Signature | undefined>(
+    undefined
+  );
   const { user } = useAuth();
   if (!user) {
     throw new Error("User not authenticated");
   }
   const onSubmit = async (data: ReportFormData) => {
+    if (!selectedSignature) {
+      Alert.alert('Error', 'Debe seleccionar una firma');
+      return;
+    }
     const reportData = {
       ...data,
+      signature_id: selectedSignature.id,
       user_id: user.id,
     };
     try {
@@ -171,19 +182,34 @@ export default function ReportCreateScreen() {
         </View>
       </FormSection>
       <FormSection title="Tiempo y Observaciones">
-          <TimePickerInput control={control} name="hora_inicio" label="Hora de Inicio"/>
-          <TimePickerInput control={control} name="hora_finalizacion" label="Hora de Finalización"/>
-          <TextInputField
+        <TimePickerInput
+          control={control}
+          name="hora_inicio"
+          label="Hora de Inicio"
+        />
+        <TimePickerInput
+          control={control}
+          name="hora_finalizacion"
+          label="Hora de Finalización"
+        />
+        <TextInputField
           control={control}
           label="observaciones"
           name="Observaciones"
         />
       </FormSection>
+      <FormSection title="Firma Digital">
+        <SignatureSelector
+          onSelect={setSelectedSignature}
+          selectedSignature={selectedSignature}
+        />
+      </FormSection>
 
       <Button
         mode="contained"
-        buttonColor='#008f5a'
+        buttonColor="#008f5a"
         onPress={handleSubmit(onSubmit)}
+        disabled={!selectedSignature}
         style={{ marginTop: 24 }}
       >
         Guardar Reporte
@@ -194,8 +220,8 @@ export default function ReportCreateScreen() {
 
 const styles = StyleSheet.create({
   switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 16,
   },
   switchColumn: {
@@ -204,12 +230,12 @@ const styles = StyleSheet.create({
   },
   // Si prefieres una cuadrícula flexible
   gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     gap: 12,
   },
   gridItem: {
-    width: '48%', // 2 columnas con espacio entre ellas
-  }
+    width: "48%", // 2 columnas con espacio entre ellas
+  },
 });
