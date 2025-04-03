@@ -12,18 +12,13 @@ const baseSchema = z.object({
   luces_reflejantes: z.boolean().optional(),
 
   //dates
-  hora_inicio: z.string({
-    message: 'La hora de inicio es requerida',
-    required_error: 'La hora de inicio es requerida',
-  }).time(),
-  hora_finalizacion: z.string({
-    message: 'La hora de finalización es requerida',
-    required_error: 'La hora de finalización es requerida',
-  }).time(),
-  fecha: z.string({
-    message: 'La fecha es requerida',
-    required_error: 'La fecha es requerida',
-  }).date(),
+  hora_inicio: z
+    .string({ required_error: 'La hora de inicio es obligatoria' })
+    .regex(/^\d{2}:\d{2}:\d{2}$/, 'La hora de inicio debe estar en formato HH:mm:ss'),
+    hora_finalizacion: z
+    .string({ required_error: 'La hora de finalización es obligatoria' })
+    .regex(/^\d{2}:\d{2}:\d{2}$/, 'La hora de finalización debe estar en formato HH:mm:ss'),
+  fecha: z.date({ required_error: 'La fecha es obligatoria' }),
 });
 
 // Extiende según tus necesidades
@@ -57,10 +52,17 @@ export const reportSchema = baseSchema.extend({
   liquido_frenos: statusEnum,
   llantas: statusEnum,
   observaciones: z.string().optional(),
-
-  user_signature_id: z.string({
-    message: 'La firma del usuario es requerida',
-  }),
+  litros_gasolina_gastada: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (!val) return undefined; // Si está vacío, devolver undefined
+      const num = Number(val);
+      if (isNaN(num)) {
+        throw new Error('Debe ingresar un número válido');
+      }
+      return num;
+    }),
 });
 
 export type ReportFormData = z.infer<typeof reportSchema>;

@@ -24,6 +24,7 @@ export default function SignatureSelector({
       if (!user) return;
       setLoading(true);
       const data = await SignatureService.getUserSignatures(user.id);
+      console.log("Signatures:", data);
       setSignatures(data);
       setLoading(false);
     };
