@@ -51,7 +51,7 @@ export const reportSchema = baseSchema.extend({
   nivel_aceite_trans: statusEnum,
   liquido_frenos: statusEnum,
   llantas: statusEnum,
-  observaciones: z.string().optional(),
+  observaciones: z.string().default("Ninguna"),
   litros_gasolina_gastada: z
     .string()
     .optional()
