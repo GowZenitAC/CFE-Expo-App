@@ -22,7 +22,7 @@ const baseSchema = z.object({
 });
 
 // Extiende según tus necesidades
-const statusEnum = z.enum(['bien', 'mal']).default('mal');
+const statusEnum = z.enum(['bien', 'mal']).default('bien');
 
 export const reportSchema = baseSchema.extend({
   // Campos adicionales

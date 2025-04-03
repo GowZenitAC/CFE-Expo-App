@@ -48,6 +48,7 @@ export default function ReportCreateScreen() {
       Alert.alert("Error", "Debe seleccionar una firma");
       return;
     }
+    
     const reportData = {
       ...data,
       user_id: user.id,
@@ -66,7 +67,7 @@ export default function ReportCreateScreen() {
             // Opcional: Resetear el formulario
             methods.reset();
             // Navegar de regreso a la pantalla de lista
-            router.replace('/app/reports');
+            router.back();
           },
         },
       ]);
@@ -74,6 +75,23 @@ export default function ReportCreateScreen() {
       console.error("Error creating report:", error);
       Alert.alert("Error", "No se pudo guardar el reporte");
     }
+  };
+
+  const handleConfirmSubmit = () => {
+    Alert.alert(
+      "Confirmar Envío",
+      "¿Estás seguro de enviar el reporte? No podrás realizar cambios después.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Aceptar",
+          onPress: () => handleSubmit(onSubmit)(), // Enviar el formulario si el usuario confirma
+        },
+      ]
+    );
   };
 
   return (
@@ -167,7 +185,7 @@ export default function ReportCreateScreen() {
           buttonColor="#008f5a"
           onPress={() => {
             console.log("Botón presionado");
-            handleSubmit(onSubmit)();
+            handleConfirmSubmit();
           }}
           disabled={!selectedSignature}
           style={{ marginTop: 24 }}
