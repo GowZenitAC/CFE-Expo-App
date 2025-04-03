@@ -1,8 +1,9 @@
 import { Stack } from "expo-router";
 import { useAuth } from "../../lib/AuthContext";
 import { Redirect } from "expo-router";
-import { IconButton } from "react-native-paper";
+import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
+import { Pressable, StyleSheet } from "react-native";
 
 export default function AppLayout() {
   const router = useRouter();
@@ -27,12 +28,15 @@ export default function AppLayout() {
           headerTintColor: "#fff",
           headerRight: () => {
             return (
-              <IconButton
-                icon="plus-circle-outline"
-                iconColor="#fff"
-                size={26}
+              <Pressable
                 onPress={() => router.push("/app/reports/create")}
-              />
+                style={({ pressed }) => [
+                  styles.headerButton,
+                  { opacity: pressed ? 0.6 : 1 }, // Efecto de opacidad al presionar
+                ]}
+              >
+                <MaterialIcons name="add-circle-outline" size={26} color="#fff" />
+              </Pressable>
             );
           },
         }}
@@ -61,7 +65,33 @@ export default function AppLayout() {
           headerTintColor: "#fff",
         }}
       />
+      <Stack.Screen
+        name="vales/index"
+        options={{
+          title: "Vales",
+          headerStyle: { backgroundColor: "#00905f" },
+          headerTintColor: "#fff",
+          headerRight: () => {
+            return (
+              <Pressable
+              onPress={() => router.push("/app/vales/create")}
+              style={({ pressed }) => [
+                styles.headerButton,
+                { opacity: pressed ? 0.6 : 1 }, // Efecto de opacidad al presionar
+              ]}
+            >
+              <MaterialIcons name="add-circle-outline" size={26} color="#fff" />
+            </Pressable>
+            );
+          }
+        }}
+      />
     </Stack>
     
   );
 }
+const styles = StyleSheet.create({
+  headerButton: {
+    padding: 8, // Espacio alrededor del ícono para un área de toque más grande
+  },
+});

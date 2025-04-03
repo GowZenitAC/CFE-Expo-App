@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { ScrollView, View, StyleSheet, Alert, Text } from "react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,6 +42,10 @@ export default function ReportCreateScreen() {
   if (!user) {
     throw new Error("User not authenticated");
   }
+
+  const onSelectSignature = useCallback((signature: Signature) => {
+    setSelectedSignature(signature);
+  }, []);
 
   const onSubmit = async (data: ReportFormData) => {
     if (!selectedSignature || !selectedSignature.id) {
@@ -164,7 +168,7 @@ export default function ReportCreateScreen() {
 
         <FormSection title="Firma Digital">
           <SignatureSelector
-            onSelect={setSelectedSignature}
+            onSelect={onSelectSignature}
             selectedSignature={selectedSignature}
           />
         </FormSection>
