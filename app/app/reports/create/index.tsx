@@ -19,8 +19,10 @@ import TextInputField from "./components/TextInputField";
 import RadioField from "./components/RadioField";
 import SignatureSelector from "@/app/app/reports/create/components/SignatureSelector";
 import { Signature } from "@/types/signature";
+import { useRouter } from 'expo-router';
 
 export default function ReportCreateScreen() {
+  const router = useRouter(); 
   // Obtener el objeto completo de useForm
   const methods = useForm<ReportFormData>({
     resolver: zodResolver(reportSchema),
@@ -57,7 +59,17 @@ export default function ReportCreateScreen() {
     try {
       const { error } = await supabase.from("inspections").insert(reportData);
       if (error) throw error;
-      Alert.alert("Éxito", "Reporte guardado correctamente");
+      Alert.alert("Éxito", "Reporte guardado correctamente",[
+        {
+          text: "OK",
+          onPress: () => {
+            // Opcional: Resetear el formulario
+            methods.reset();
+            // Navegar de regreso a la pantalla de lista
+            router.replace('/app/reports');
+          },
+        },
+      ]);
     } catch (error) {
       console.error("Error creating report:", error);
       Alert.alert("Error", "No se pudo guardar el reporte");
