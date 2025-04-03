@@ -46,6 +46,14 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="reports/[id]"
+        options={{
+          title: `Detalles del reporte` ,
+          headerStyle: { backgroundColor: "#00905f" },
+          headerTintColor: "#fff",
+        }}
+      />
+      <Stack.Screen
         name="signatures/create"
         options={{
           title: "Crear Firma",
