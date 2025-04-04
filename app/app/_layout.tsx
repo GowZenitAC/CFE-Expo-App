@@ -71,19 +71,27 @@ export default function AppLayout() {
           title: "Vales",
           headerStyle: { backgroundColor: "#00905f" },
           headerTintColor: "#fff",
-          headerRight: () => {
-            return (
-              <Pressable
-              onPress={() => router.push("/app/vales/create")}
-              style={({ pressed }) => [
-                styles.headerButton,
-                { opacity: pressed ? 0.6 : 1 }, // Efecto de opacidad al presionar
-              ]}
-            >
-              <MaterialIcons name="add-circle-outline" size={26} color="#fff" />
-            </Pressable>
-            );
-          }
+          // headerRight: () => {
+          //   return (
+          //     <Pressable
+          //     onPress={() => router.push("/app/vales/create")}
+          //     style={({ pressed }) => [
+          //       styles.headerButton,
+          //       { opacity: pressed ? 0.6 : 1 }, // Efecto de opacidad al presionar
+          //     ]}
+          //   >
+          //     <MaterialIcons name="add-circle-outline" size={26} color="#fff" />
+          //   </Pressable>
+          //   );
+          // }
+        }}
+      />
+      <Stack.Screen
+        name="vales/create/index"
+        options={{
+          title: "Añadir Vale",
+          headerStyle: { backgroundColor: "#00905f" },
+          headerTintColor: "#fff",
         }}
       />
     </Stack>
