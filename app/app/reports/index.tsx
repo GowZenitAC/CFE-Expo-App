@@ -7,6 +7,7 @@ import {
   Paragraph,
   Button,
   ActivityIndicator,
+  FAB,
 } from "react-native-paper";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthContext";
@@ -99,6 +100,7 @@ export default function ReportsScreen() {
           data={inspections}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderInspection}
+          contentContainerStyle={{ paddingBottom: 80}}
           ListHeaderComponent={
             <View style={styles.header}>
               <Title style={styles.headerTitle}>Últimos 5 reportes</Title>
@@ -106,6 +108,12 @@ export default function ReportsScreen() {
           }
         />
       )}
+      <FAB
+        style={styles.fab}
+        icon="plus"
+        color="#fff"
+        onPress={() => router.push("/app/reports/create")}
+      />
     </View>
   );
 }
@@ -147,5 +155,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 16,
     color: "#666",
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#008f5a",
   },
 });

@@ -26,19 +26,6 @@ export default function AppLayout() {
           title: "Reportes",
           headerStyle: { backgroundColor: "#00905f" },
           headerTintColor: "#fff",
-          headerRight: () => {
-            return (
-              <Pressable
-                onPress={() => router.push("/app/reports/create")}
-                style={({ pressed }) => [
-                  styles.headerButton,
-                  { opacity: pressed ? 0.6 : 1 }, // Efecto de opacidad al presionar
-                ]}
-              >
-                <MaterialIcons name="add-circle-outline" size={26} color="#fff" />
-              </Pressable>
-            );
-          },
         }}
       />
       <Stack.Screen
@@ -71,19 +58,6 @@ export default function AppLayout() {
           title: "Vales",
           headerStyle: { backgroundColor: "#00905f" },
           headerTintColor: "#fff",
-          // headerRight: () => {
-          //   return (
-          //     <Pressable
-          //     onPress={() => router.push("/app/vales/create")}
-          //     style={({ pressed }) => [
-          //       styles.headerButton,
-          //       { opacity: pressed ? 0.6 : 1 }, // Efecto de opacidad al presionar
-          //     ]}
-          //   >
-          //     <MaterialIcons name="add-circle-outline" size={26} color="#fff" />
-          //   </Pressable>
-          //   );
-          // }
         }}
       />
       <Stack.Screen
