@@ -94,6 +94,14 @@ export default function AppLayout() {
           headerTintColor: "#fff",
         }}
       />
+      <Stack.Screen
+        name="history/index"
+        options={{
+          title: "Historial",
+          headerStyle: { backgroundColor: "#00905f" },
+          headerTintColor: "#fff",
+        }}
+      />
     </Stack>
     
   );

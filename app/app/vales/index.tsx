@@ -11,15 +11,7 @@ import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
-
-// Interfaz para los datos del vale (ajusta según tu estructura en Supabase)
-interface Vale {
-  id: string;
-  vale_url: string;
-  signature_id: string;
-  user_id: string;
-  created_at: string;
-}
+import Vale from "@/interfaces/Vales";
 
 export default function ValesListScreen() {
   const router = useRouter();
