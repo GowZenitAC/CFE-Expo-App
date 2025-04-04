@@ -2,14 +2,14 @@ import { z } from 'zod';
 
 const baseSchema = z.object({
   //booleans
-  botiquin: z.boolean().optional(),
-  extintor: z.boolean().optional(),
-  gato_hidraulico: z.boolean().optional(),
-  cruceta: z.boolean().optional(),
-  lampara_mano: z.boolean().optional(),
-  cables_pasacorriente: z.boolean().optional(),
-  llanta_refaccion: z.boolean().optional(),
-  luces_reflejantes: z.boolean().optional(),
+  botiquin: z.boolean().default(false),
+  extintor: z.boolean().default(false),
+  gato_hidraulico: z.boolean().default(false),
+  cruceta: z.boolean().default(false),
+  lampara_mano: z.boolean().default(false),
+  cables_pasacorriente: z.boolean().default(false),
+  llanta_refaccion: z.boolean().default(false),
+  luces_reflejantes: z.boolean().default(false),
 
   //dates
   hora_inicio: z
