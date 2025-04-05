@@ -274,7 +274,7 @@ export default function HistoryScreen() {
           <Card.Content>
             <Title style={styles.cardTitle}>Vale #{vale.id}</Title>
             <Paragraph style={styles.cardText}>
-              Fecha: {new Date(vale.created_at).toLocaleDateString()}
+              Fecha: {vale.created_at.split("T")[0]}
             </Paragraph>
             <Paragraph style={styles.cardText}>
               Firma ID: {vale.signature_id}
@@ -289,7 +289,7 @@ export default function HistoryScreen() {
           <Card.Content>
             <Title style={styles.cardTitle}>Inspección #{inspection.id}</Title>
             <Paragraph style={styles.cardText}>
-              Fecha: {new Date(inspection.fecha).toLocaleDateString()}
+              Fecha: {inspection.fecha}
             </Paragraph>
             <Paragraph style={styles.cardText}>
               Placas: {inspection.placas_vehiculo}

@@ -60,7 +60,7 @@ export default function ReportDetailScreen() {
             <Divider style={styles.divider} />
             <Paragraph style={styles.paragraph}>
               <Text style={styles.label}>Fecha: </Text>
-              {new Date(inspection.fecha).toLocaleDateString()}
+              {(inspection.fecha)}
             </Paragraph>
             <Paragraph style={styles.paragraph}>
               <Text style={styles.label}>Placas: </Text>
