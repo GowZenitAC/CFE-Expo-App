@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { ScrollView, View, StyleSheet, Alert, Text } from "react-native";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +19,7 @@ import TextInputField from "./components/TextInputField";
 import RadioField from "./components/RadioField";
 import SignatureSelector from "@/app/app/reports/create/components/SignatureSelector";
 import { Signature } from "@/types/signature";
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 
 export default function ReportCreateScreen() {
   const router = useRouter(); 
@@ -38,10 +38,18 @@ export default function ReportCreateScreen() {
 
   const [selectedSignature, setSelectedSignature] = useState<Signature | undefined>(undefined);
   const { user } = useAuth();
-
+  const [refreshSignatures, setRefreshSignatures] = useState(false);
   if (!user) {
     throw new Error("User not authenticated");
   }
+
+  // Detectar cuando la pantalla vuelve a estar en foco
+  useFocusEffect(
+    useCallback(() => {
+      // Cambiar el estado para disparar la recarga de firmas
+      setRefreshSignatures((prev) => !prev);
+    }, [])
+  );
 
   const onSelectSignature = useCallback((signature: Signature) => {
     setSelectedSignature(signature);
@@ -170,6 +178,7 @@ export default function ReportCreateScreen() {
           <SignatureSelector
             onSelect={onSelectSignature}
             selectedSignature={selectedSignature}
+            refresh={refreshSignatures}
           />
         </FormSection>
 

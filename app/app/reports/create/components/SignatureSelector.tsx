@@ -10,9 +10,10 @@ import { ActivityIndicator, Button, Text as PaperText } from 'react-native-paper
 interface SignatureSelectorProps {
   onSelect: (signature: Signature) => void;
   selectedSignature?: Signature;
+  refresh?: boolean;
 }
 
-const SignatureSelector = memo(({ onSelect, selectedSignature }: SignatureSelectorProps) => {
+const SignatureSelector = memo(({ onSelect, selectedSignature, refresh }: SignatureSelectorProps) => {
   const router = useRouter();
   const {user} = useAuth();
   const [signatures, setSignatures] = useState<Signature[]>([]);
@@ -40,7 +41,7 @@ const SignatureSelector = memo(({ onSelect, selectedSignature }: SignatureSelect
     };
 
     fetchSignatures();
-  }, []);
+  }, [refresh]);
 
   const signatureOptions = signatures.map((signature) => ({
     key: signature.id,
