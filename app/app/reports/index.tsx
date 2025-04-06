@@ -108,12 +108,14 @@ export default function ReportsScreen() {
           }
         />
       )}
-      <FAB
-        style={styles.fab}
-        icon="plus"
-        color="#fff"
-        onPress={() => router.push("/app/reports/create")}
-      />
+      {inspections.length > 0 && (
+        <FAB
+          style={styles.fab}
+          icon="plus"
+          color="#fff"
+          onPress={() => router.push("/app/reports/create")}
+        />
+      )}
     </View>
   );
 }
