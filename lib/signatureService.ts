@@ -30,7 +30,7 @@ export const SignatureService = {
       }
 
       // Subir el archivo a Supabase Storage
-      const fileName = `${userId}/${Date.now()}.png`;
+      const fileName = `${Date.now()}.png`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('signatures')
         .upload(fileName, bytes, {

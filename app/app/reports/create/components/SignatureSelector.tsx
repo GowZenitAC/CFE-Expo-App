@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'expo-router';
+import { useAuth } from '@/lib/AuthContext';
 import { Signature } from '@/types/signature';
 import { ActivityIndicator, Button, Text as PaperText } from 'react-native-paper';
 
@@ -13,6 +14,7 @@ interface SignatureSelectorProps {
 
 const SignatureSelector = memo(({ onSelect, selectedSignature }: SignatureSelectorProps) => {
   const router = useRouter();
+  const {user} = useAuth();
   const [signatures, setSignatures] = useState<Signature[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,6 +25,7 @@ const SignatureSelector = memo(({ onSelect, selectedSignature }: SignatureSelect
         const { data, error } = await supabase
           .from('signatures')
           .select('*')
+          .eq('user_id', user?.id) // Filtrar por el ID del usuario autenticado 
           .order('created_at', { ascending: false });
 
         if (error) throw error;
