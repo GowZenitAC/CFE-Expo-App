@@ -86,7 +86,7 @@ export default function ValesCreateScreen() {
 
     try {
       const valeData = {
-        vale_url: photoUri,
+        vale_url: photoUrl,
         signature_id: selectedSignature.id,
         user_id: user.id,
         created_at: new Date().toISOString(),
