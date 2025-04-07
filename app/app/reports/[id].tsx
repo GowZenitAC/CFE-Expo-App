@@ -76,6 +76,12 @@ export default function ReportDetailScreen() {
                 {inspection.litros_gasolina_gastada}
               </Paragraph>
             )}
+            {inspection.kilometraje && (
+              <Paragraph style={styles.paragraph}>
+                <Text style={styles.label}>Kilometraje: </Text>
+                {inspection.kilometraje}
+              </Paragraph>
+            )}
           </Card.Content>
         </Card>
   

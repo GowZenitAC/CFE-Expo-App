@@ -149,6 +149,12 @@ export default function ReportCreateScreen() {
             name="litros_gasolina_gastada"
             keyboardType="numeric"
           />
+          <TextInputField
+            control={control}
+            label="Kilometraje"
+            name="kilometraje"
+            keyboardType="numeric"
+          />
         </FormSection>
 
         <FormSection title="Accesorios">

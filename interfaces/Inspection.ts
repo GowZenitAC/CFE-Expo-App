@@ -37,6 +37,7 @@ interface Inspection {
     hora_inicio: string;
     hora_finalizacion: string;
     observaciones?: string;
+    kilometraje?: number;
   }
 
 export default Inspection;
