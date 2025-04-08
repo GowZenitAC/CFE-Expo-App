@@ -44,6 +44,14 @@ export default function AppLayout() {
           headerTintColor: "#fff",
         }}
       />
+       <Stack.Screen
+        name="reports/edit/[id]"
+        options={{
+          title: `Editar info del reporte` ,
+          headerStyle: { backgroundColor: "#00905f" },
+          headerTintColor: "#fff",
+        }}
+      />
       <Stack.Screen
         name="signatures/create"
         options={{

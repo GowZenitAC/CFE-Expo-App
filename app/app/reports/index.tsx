@@ -1,4 +1,3 @@
-// app/(app)/reports/index.tsx
 import React, { useEffect, useState, useCallback } from "react";
 import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
 import {
@@ -8,6 +7,9 @@ import {
   Button,
   ActivityIndicator,
   FAB,
+  IconButton,
+  Menu,
+  Divider,
 } from "react-native-paper";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthContext";
@@ -19,6 +21,10 @@ export default function ReportsScreen() {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const router = useRouter();
+
+  // Estado para controlar qué menú está visible (usamos el ID de la inspección)
+  const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
+
   const fetchInspections = useCallback(async () => {
     if (!user) {
       Alert.alert("Error", "Usuario no autenticado");
@@ -44,35 +50,67 @@ export default function ReportsScreen() {
       setLoading(false);
     }
   }, [user]);
+
   useFocusEffect(
     useCallback(() => {
       fetchInspections();
     }, [fetchInspections])
   );
-  const renderInspection = ({ item }: { item: Inspection }) => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Title>Inspección del {item.fecha}</Title>
-        <Paragraph>Placas: {item.placas_vehiculo}</Paragraph>
-        <Paragraph>
-          Hora: {item.hora_inicio} - {item.hora_finalizacion}
-        </Paragraph>
-        {item.litros_gasolina_gastada && (
+
+  const renderInspection = ({ item }: { item: Inspection }) => {
+    const isMenuVisible = visibleMenuId === item.id;
+
+    return (
+      <Card style={styles.card}>
+        {/* Contenedor para el título y el ícono de tres puntos */}
+        <View style={styles.cardHeader}>
+          <Title style={styles.cardTitle}>Inspección del {item.fecha}</Title>
+          <Menu
+            visible={isMenuVisible}
+            onDismiss={() => setVisibleMenuId(null)}
+            anchor={
+              <IconButton
+                icon="dots-vertical"
+                size={24}
+                onPress={() => setVisibleMenuId(item.id)}
+                style={styles.menuButton}
+              />
+            }
+          >
+            <Menu.Item
+              onPress={() => {
+                console.log(`Editar inspección con ID: ${item.id}`);
+                router.push(`/app/reports/edit/${item.id}`); 
+                setVisibleMenuId(null);
+              }}
+              title="Editar Info"
+            />
+            <Divider />
+            {/* Puedes agregar más opciones al menú en el futuro */}
+          </Menu>
+        </View>
+        <Card.Content>
+          <Paragraph>Placas: {item.placas_vehiculo}</Paragraph>
           <Paragraph>
-            Litros de gasolina gastada: {item.litros_gasolina_gastada}
+            Hora: {item.hora_inicio} - {item.hora_finalizacion}
           </Paragraph>
-        )}
-        {item.observaciones && (
-          <Paragraph>Observaciones: {item.observaciones}</Paragraph>
-        )}
-      </Card.Content>
-      <Card.Actions>
-        <Button onPress={() => router.push(`/app/reports/${item.id}`)}>
-          Ver Detalles
-        </Button>
-      </Card.Actions>
-    </Card>
-  );
+          {item.litros_gasolina_gastada && (
+            <Paragraph>
+              Litros de gasolina gastada: {item.litros_gasolina_gastada}
+            </Paragraph>
+          )}
+          {item.observaciones && (
+            <Paragraph>Observaciones: {item.observaciones}</Paragraph>
+          )}
+        </Card.Content>
+        <Card.Actions>
+          <Button onPress={() => router.push(`/app/reports/${item.id}`)}>
+            Ver Detalles
+          </Button>
+        </Card.Actions>
+      </Card>
+    );
+  };
 
   if (loading) {
     return (
@@ -82,6 +120,7 @@ export default function ReportsScreen() {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       {inspections.length === 0 ? (
@@ -100,7 +139,7 @@ export default function ReportsScreen() {
           data={inspections}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderInspection}
-          contentContainerStyle={{ paddingBottom: 80}}
+          contentContainerStyle={{ paddingBottom: 80 }}
           ListHeaderComponent={
             <View style={styles.header}>
               <Title style={styles.headerTitle}>Últimos 5 reportes</Title>
@@ -135,6 +174,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 3,
   },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  cardTitle: {
+    fontSize: 18, // Reducimos el tamaño para que quepa con el ícono
+  },
+  menuButton: {
+    margin: 0, // Ajustamos el margen para que el ícono no tenga espacio extra
+  },
   header: {
     padding: 16,
     flexDirection: "row",
@@ -143,7 +195,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   createButton: {
     backgroundColor: "#008f5a",

@@ -52,7 +52,15 @@ export const reportSchema = baseSchema.extend({
   liquido_frenos: statusEnum,
   llantas: statusEnum,
   observaciones: z.string().default("Ninguna"),
-  kilometraje: z.string().optional().transform((val) => {
+  kilometraje_inicio: z.string().optional().transform((val) => {
+    if (!val) return undefined; // Si está vacío, devolver undefined
+    const num = Number(val);
+    if (isNaN(num)) {
+      throw new Error('Debe ingresar un número válido');
+    }
+    return num;
+  }),
+  kilometraje_final: z.string().optional().transform((val) => {
     if (!val) return undefined; // Si está vacío, devolver undefined
     const num = Number(val);
     if (isNaN(num)) {

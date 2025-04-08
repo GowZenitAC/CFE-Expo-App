@@ -151,8 +151,14 @@ export default function ReportCreateScreen() {
           />
           <TextInputField
             control={control}
-            label="Kilometraje"
-            name="kilometraje"
+            label="Kilometraje de Inicio"
+            name="kilometraje_inicio"
+            keyboardType="numeric"
+          />
+          <TextInputField
+            control={control}
+            label="Kilometraje de Finalización"
+            name="kilometraje_final"
             keyboardType="numeric"
           />
         </FormSection>
