@@ -38,7 +38,7 @@ interface Vale {
 interface Inspection {
   id: number;
   user_id: string;
-  signature_id: number | string;
+  user_signature_id: number | string;
   fecha: string;
   placas_vehiculo: string;
   viseras: string;
@@ -208,7 +208,7 @@ export default function HistoryScreen() {
           return (
             inspection.id.toString().includes(searchLower) ||
             inspection.placas_vehiculo.toLowerCase().includes(searchLower) ||
-            inspection.signature_id
+            inspection.user_signature_id
               .toString()
               .toLowerCase()
               .includes(searchLower) ||
@@ -295,7 +295,7 @@ export default function HistoryScreen() {
               Placas: {inspection.placas_vehiculo}
             </Paragraph>
             <Paragraph style={styles.cardText}>
-              Firma ID: {inspection.signature_id}
+              Firma ID: {inspection.user_signature_id}
             </Paragraph>
             <Paragraph style={styles.cardText}>
               Observaciones: {inspection.observaciones || "Ninguna"}
