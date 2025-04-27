@@ -28,7 +28,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 // Interfaces proporcionadas
 interface Vale {
-  id: string;
+  id: number;
   vale_url: string;
   signature_id: string;
   user_id: string;
@@ -102,6 +102,14 @@ export default function HistoryScreen() {
   );
   const [menuVisible, setMenuVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const resetFilters = () => {
+    setFilterType("all");
+    setSearchText("");
+    setStartDate(null);
+    setEndDate(null);
+    setBotiquinFilter("all");
+  };
 
   // Verificar que el usuario esté autenticado
   if (!user) {
@@ -200,8 +208,8 @@ export default function HistoryScreen() {
         if (item.type === "vale") {
           const vale = item.data;
           return (
-            vale.id.toLowerCase().includes(searchLower) ||
-            vale.signature_id.toLowerCase().includes(searchLower)
+            vale.id.toString().toLowerCase().includes(searchLower) ||
+            vale.signature_id.toString().toLowerCase().includes(searchLower)
           );
         } else {
           const inspection = item.data;
@@ -357,129 +365,137 @@ export default function HistoryScreen() {
 
       {/* Modal para los filtros adicionales */}
       <Portal>
-        <Modal
-          visible={modalVisible}
-          onDismiss={() => setModalVisible(false)}
-          contentContainerStyle={styles.modalContainer}
+  <Modal
+    visible={modalVisible}
+    onDismiss={() => setModalVisible(false)}
+    contentContainerStyle={styles.modalContainer}
+  >
+    <Title style={styles.modalTitle}>Filtros Adicionales</Title>
+
+    {/* Filtro por texto */}
+    <TextInput
+      label="Buscar..."
+      value={searchText}
+      onChangeText={setSearchText}
+      style={styles.modalInput}
+      mode="outlined"
+    />
+
+    {/* Filtro por fecha de inicio */}
+    <Button
+      mode="outlined"
+      onPress={() => setShowStartDatePicker(true)}
+      style={styles.modalButton}
+    >
+      {startDate ? startDate.toLocaleDateString() : "Fecha Inicio"}
+    </Button>
+    {showStartDatePicker && (
+      <DateTimePicker
+        value={startDate || new Date()}
+        mode="date"
+        display={Platform.OS === "ios" ? "spinner" : "default"}
+        onChange={(event, selectedDate) => {
+          setShowStartDatePicker(false);
+          if (selectedDate) setStartDate(selectedDate);
+        }}
+      />
+    )}
+
+    {/* Filtro por fecha de fin */}
+    <Button
+      mode="outlined"
+      onPress={() => setShowEndDatePicker(true)}
+      style={styles.modalButton}
+    >
+      {endDate ? endDate.toLocaleDateString() : "Fecha Fin"}
+    </Button>
+    {showEndDatePicker && (
+      <DateTimePicker
+        value={endDate || new Date()}
+        mode="date"
+        display={Platform.OS === "ios" ? "spinner" : "default"}
+        onChange={(event, selectedDate) => {
+          setShowEndDatePicker(false);
+          if (selectedDate) setEndDate(selectedDate);
+        }}
+      />
+    )}
+
+    {/* Filtro por estado de botiquín */}
+    <Menu
+      visible={menuVisible}
+      onDismiss={() => setMenuVisible(false)}
+      anchor={
+        <Button
+          mode="outlined"
+          onPress={() => setMenuVisible(true)}
+          style={styles.modalButton}
         >
-          <Title style={styles.modalTitle}>Filtros Adicionales</Title>
+          Botiquín:{" "}
+          {botiquinFilter === "all"
+            ? "Todos"
+            : botiquinFilter === "yes"
+            ? "Sí"
+            : "No"}
+        </Button>
+      }
+    >
+      <Menu.Item
+        onPress={() => {
+          setBotiquinFilter("all");
+          setMenuVisible(false);
+        }}
+        title="Todos"
+      />
+      <Divider />
+      <Menu.Item
+        onPress={() => {
+          setBotiquinFilter("yes");
+          setMenuVisible(false);
+        }}
+        title="Sí"
+      />
+      <Divider />
+      <Menu.Item
+        onPress={() => {
+          setBotiquinFilter("no");
+          setMenuVisible(false);
+        }}
+        title="No"
+      />
+    </Menu>
 
-          {/* Filtro por texto */}
-          <TextInput
-            label="Buscar..."
-            value={searchText}
-            onChangeText={setSearchText}
-            style={styles.modalInput}
-            mode="outlined"
-          />
-
-          {/* Filtro por fecha de inicio */}
-          <Button
-            mode="outlined"
-            onPress={() => setShowStartDatePicker(true)}
-            style={styles.modalButton}
-          >
-            {startDate ? startDate.toLocaleDateString() : "Fecha Inicio"}
-          </Button>
-          {showStartDatePicker && (
-            <DateTimePicker
-              value={startDate || new Date()}
-              mode="date"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
-              onChange={(event, selectedDate) => {
-                setShowStartDatePicker(false);
-                if (selectedDate) setStartDate(selectedDate);
-              }}
-            />
-          )}
-
-          {/* Filtro por fecha de fin */}
-          <Button
-            mode="outlined"
-            onPress={() => setShowEndDatePicker(true)}
-            style={styles.modalButton}
-          >
-            {endDate ? endDate.toLocaleDateString() : "Fecha Fin"}
-          </Button>
-          {showEndDatePicker && (
-            <DateTimePicker
-              value={endDate || new Date()}
-              mode="date"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
-              onChange={(event, selectedDate) => {
-                setShowEndDatePicker(false);
-                if (selectedDate) setEndDate(selectedDate);
-              }}
-            />
-          )}
-
-          {/* Filtro por estado de botiquín */}
-          <Menu
-            visible={menuVisible}
-            onDismiss={() => setMenuVisible(false)}
-            anchor={
-              <Button
-                mode="outlined"
-                onPress={() => setMenuVisible(true)}
-                style={styles.modalButton}
-              >
-                Botiquín:{" "}
-                {botiquinFilter === "all"
-                  ? "Todos"
-                  : botiquinFilter === "yes"
-                  ? "Sí"
-                  : "No"}
-              </Button>
-            }
-          >
-            <Menu.Item
-              onPress={() => {
-                setBotiquinFilter("all");
-                setMenuVisible(false);
-              }}
-              title="Todos"
-            />
-            <Divider />
-            <Menu.Item
-              onPress={() => {
-                setBotiquinFilter("yes");
-                setMenuVisible(false);
-              }}
-              title="Sí"
-            />
-            <Divider />
-            <Menu.Item
-              onPress={() => {
-                setBotiquinFilter("no");
-                setMenuVisible(false);
-              }}
-              title="No"
-            />
-          </Menu>
-
-          {/* Botones para aplicar y cerrar */}
-          <View style={styles.modalActions}>
-            <Button
-              mode="contained"
-              onPress={() => {
-                applyFilters();
-                setModalVisible(false);
-              }}
-              style={styles.modalActionButton}
-              buttonColor="#008f5a"
-            >
-              Aplicar
-            </Button>
-            <Button
-              mode="outlined"
-              onPress={() => setModalVisible(false)}
-              style={styles.modalActionButton}
-            >
-              Cerrar
-            </Button>
-          </View>
-        </Modal>
-      </Portal>
+    {/* Botones para aplicar, borrar filtros y cerrar */}
+    <View style={styles.modalActions}>
+      {/* <Button
+        mode="contained"
+        onPress={() => {
+          applyFilters();
+          setModalVisible(false);
+        }}
+        style={styles.modalActionButton}
+        buttonColor="#008f5a"
+      >
+        Aplicar
+      </Button> */}
+      <Button
+        mode="contained"
+         buttonColor="#008f5a"
+        onPress={resetFilters}
+        style={styles.modalActionButton}
+      >
+        Borrar Filtros
+      </Button>
+      <Button
+        mode="outlined"
+        onPress={() => setModalVisible(false)}
+        style={styles.modalActionButton}
+      >
+        Cerrar
+      </Button>
+    </View>
+  </Modal>
+</Portal>
     </View>
   );
 }
